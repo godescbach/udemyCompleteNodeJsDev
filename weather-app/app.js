@@ -13,17 +13,17 @@ if (process.argv[2]) {
   console.log('Please provide a location.')
   return
 }
-geocode(process.argv[2], (error, data) => {
+geocode(process.argv[2], (error, { longitude, latitude, location }) => {//data) => {
   if (error) {
     return console.log(error)
   }
-  console.log(data)
-  forecast(data.longitude, data.latitude, (error, forecastData) => {
+  console.log(longitude, latitude, location)
+  forecast(longitude, latitude, (error, forecastData) => {
     if (error) {
       return console.log(error)
     }
 
-    console.log(data.location)
+    console.log(location)
     console.log(forecastData.summary + '  It is currently ' + 
       forecastData.temperature + ' degrees out.  There is a ' + 
       forecastData.precipProbability + ' chance of rain.')
