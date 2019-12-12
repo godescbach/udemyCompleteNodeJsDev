@@ -1,10 +1,17 @@
 const path = require('path')
-
 const express = require('express')
+const hbs = require('hbs')
 
 const app = express()
+const viewsPath = 
 
+// Setup handlebars engine and views location
 app.set('view engine', 'hbs')
+app.set('views', path.join(__dirname, '../templates/views'))
+hbs.registerPartials(path.join(__dirname, '../templates/partials'))
+
+
+// Setup static directory to serve
 app.use(express.static(path.join(__dirname, '../public')))
 
 app.get('', (req, resp) => {
@@ -24,7 +31,24 @@ app.get('/about', (req, resp) => {
 app.get('/help', (req, resp) => {
   resp.render('help',  {
     title: 'Help',
-    message: 'This is my help page message.'
+    message: 'This is my help message.',
+    name: 'Tom Mostyn III'
+  })
+})
+
+app.get('/help/*', (req, resp) => {
+  resp.render('pagenotfound', {
+    title: '404',
+    message: 'Help article not found.',
+    name: 'Tom Mostyn III'
+  })
+})
+
+app.get('*', (req, resp) => {
+  resp.render('pagenotfound', {
+    title: '404',
+    message: 'Page not found.',
+    name: 'Tom Mostyn III'
   })
 })
 
