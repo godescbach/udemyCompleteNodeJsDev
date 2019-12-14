@@ -2,6 +2,9 @@ const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
 
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
+
 const app = express()
 const viewsPath = 
 
@@ -42,9 +45,26 @@ app.get('/weather', (req, resp) => {
       error: 'You must provide an address.'
     })
   }
-  resp.send({
-    forecast: 'It is not snowing',
-    location: req.query.address
+
+  geocode(req.query.address, (error, { longitude, latitude, location }) => {//data) => {
+    if (error) {
+      return resp.send({ error })
+    }
+    // console.log(longitude, latitude, location)
+    forecast(longitude, latitude, (error, forecastData) => {
+      if (error) {
+        return resp.send({ error })
+      }
+  
+      const forecastString = forecastData.summary + '  It is currently ' + 
+        forecastData.temperature + ' degrees out.  There is a ' + 
+        forecastData.precipProbability + ' chance of rain.'
+      resp.send({
+        forecast: forecastString,
+        location,
+        address: req.query.address
+      })
+    })
   })
 })
 
