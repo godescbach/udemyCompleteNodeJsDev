@@ -36,6 +36,29 @@ app.get('/help', (req, resp) => {
   })
 })
 
+app.get('/weather', (req, resp) => {
+  if (!req.query.address) {
+    return resp.send({
+      error: 'You must provide an address.'
+    })
+  }
+  resp.send({
+    forecast: 'It is not snowing',
+    location: req.query.address
+  })
+})
+
+// app.get('/products', (req, resp) => {
+//   if (!req.query.search) {
+//     return resp.send({
+//       error: 'You must provide a search term.'
+//     })
+//   }
+//   resp.send({
+//     products: []
+//   })
+// })
+
 app.get('/help/*', (req, resp) => {
   resp.render('pagenotfound', {
     title: '404',

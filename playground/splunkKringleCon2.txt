@@ -1,0 +1,7 @@
+sourcetype=wineventlog EventCode=4688
+|eval hex_convert_pid=tonumber(New_Process_ID, 16)
+|eval hex_convert_ppid=tonumber(Creator_Process_ID, 16)
+
+sourcetype="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
+|stats count by EventCode,EventDescription
+|sort -count
